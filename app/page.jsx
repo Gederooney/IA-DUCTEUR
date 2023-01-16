@@ -1,91 +1,168 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+"use client";
+import React from "react";
+import { useState, useEffect } from "react";
+import "./styles/loader.css";
 
-const inter = Inter({ subsets: ['latin'] })
+const page = () => {
+	const [fileObject, setFileObject] = useState({
+		content: "",
+		ext: "",
+		fileName: "",
+		language: "",
+		contentTranslated: "",
+	});
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.jsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+	const [state, setState] = useState({
+		loading: false,
+		step: 0,
+	});
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
+	useEffect(() => {
+		setState({ ...state, loading: false });
+	}, [fileObject]);
 
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+	const languagesList = [
+		{ label: "Français", value: "French" },
+		{ label: "Espagnol", value: "Spanish" },
+		{ label: "Anglais", value: "English" },
+		{ label: "Italien", value: "Italian" },
+		{ label: "Allemand", value: "German" },
+		{ label: "Mandarin", value: "Chinese" },
+		{ label: "Japonais", value: "Japanese" },
+	];
+	const handleChange = (e) => {
+		e.preventDefault();
+		const file = e.target.files[0];
+		const fileName = file.name;
+		const fileExtension = fileName.split(".").pop();
+		const reader = new FileReader();
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
+		reader.onload = () => {
+			setFileObject({
+				...fileObject,
+				content: reader.result,
+				fileName: fileName.split(".").slice(0, -1).join("."),
+				ext: fileExtension,
+			});
+			setState({ loading: false, step: 1 });
+		};
+		reader.readAsText(file);
+	};
+	const handleSubmit = async (e) => {
+		try {
+			setState({ ...state, loading: true });
+			const res = await fetch("http://localhost:3000/api/transcription", {
+				method: "POST",
+				body: JSON.stringify({
+					str: fileObject.content,
+					lang: fileObject.language,
+				}),
+			});
+			const { str } = await res.json();
+			setFileObject({ ...fileObject, contentTranslated: str });
+			setState({ loading: false, step: 3 });
+		} catch (error) {
+			alert(error.message);
+			window.location.reload();
+		}
+	};
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+	const download = () => {
+		const blob = new Blob([fileObject.contentTranslated], {
+			type: "text/plain",
+		});
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = `${fileObject.fileName}-${fileObject.language}.${fileObject.ext}`;
+		a.click();
+		setState({ ...state, step: 0 });
+		return;
+	};
+	if (state.loading)
+		return (
+			<div className='lds-roller'>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		);
+	return (
+		<div>
+			{state.step !== 3 ? (
+				<div className='input'>
+					<h4>Veuillez choisir un fichier à convertir</h4>
+					<input
+						type='file'
+						name=''
+						id=''
+						onChange={(e) => handleChange(e)}
+						accept='.doc, .docx, .txt'
+					/>
+				</div>
+			) : (
+				<></>
+			)}
+			{state.step === 1 ? (
+				<select
+					onChange={(e) => {
+						setFileObject({
+							...fileObject,
+							language: e.target.value.trim(),
+						});
+						setState({ ...state, step: 2 });
+					}}
+				>
+					<option value=''>Choississez choississez une langue</option>
+					{languagesList.map((l) => (
+						<option key={l.value} value={l.value}>
+							{l.label}
+						</option>
+					))}
+				</select>
+			) : (
+				<></>
+			)}
+			{state.step === 2 ? (
+				<button
+					className='btn'
+					type='submit'
+					onClick={(e) => handleSubmit(e)}
+				>
+					Traduire en{" "}
+					{
+						languagesList.find(
+							(e) => e.value === fileObject.language
+						).label
+					}
+				</button>
+			) : (
+				<></>
+			)}
+			{state.step === 3 ? (
+				<>
+					Votre fichier est traduit.
+					<a
+						className='btn'
+						href='#'
+						onClick={(e) => {
+							e.preventDefault();
+							return download();
+						}}
+					>
+						Cliquez pour lélécharger
+					</a>
+				</>
+			) : (
+				<></>
+			)}
+		</div>
+	);
+};
+
+export default page;
