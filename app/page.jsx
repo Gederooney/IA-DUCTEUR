@@ -51,7 +51,7 @@ const page = () => {
 	const handleSubmit = async (e) => {
 		try {
 			setState({ ...state, loading: true });
-			const res = await fetch("http://localhost:3000/api/transcription", {
+			const res = await fetch("https://app.ronygedeon.com/api/transcription", {
 				method: "POST",
 				body: JSON.stringify({
 					str: fileObject.content,
