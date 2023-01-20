@@ -10,105 +10,141 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
-.content {
 	text-align: center;
 }
-.content h1 {
-	font-size: 2rem;
-	line-height: 1;
-	letter-spacing: 0.1rem;
-	font-weight: 700;
+h1 {
+	font-size: 4rem;
+	line-height: 1.25;
+	font-weight: 800;
 }
-
-.content > p {
-	font-size: 1.2rem;
-	letter-spacing: 0.1rem;
-	line-height: 1;
-	margin: 0.5rem 0;
+input:active,
+input:focus,
+textarea:focus,
+select:focus {
+	outline: none !important;
 }
-.content > .btns > button {
+button {
+	min-width: 150px;
 	display: inline-block;
-	border: 0;
-	outline: none;
-	padding: 1rem 0;
-	width: 200px;
-	background: #000;
-	color: #fff;
-	cursor: pointer;
-	margin: 0.5rem;
-	font-weight: 600;
-	font-size: 1.1rem;
-	border: 1px solid #000;
-	transition: all 200ms ease;
-}
-.content > .btns > button:hover {
-	background: none;
-	color: #000;
-	border: 1px solid #000;
-}
-
-.fileReader-content {
-	max-width: 700px;
-	margin: 2.5rem 0;
-}
-.fileReader-content p {
-	font-size: 1rem;
-	font-weight: 400;
-	letter-spacing: 0.1rem;
-	line-height: 1;
-}
-.fileReader-content .box {
-	width: 100%;
-	margin-top: 2.5rem;
-	padding: 1rem;
-	border-radius: 0.5rem;
-	box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-		rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-}
-.fileReader-content .box > p {
-	margin: 1rem 0;
-}
-
-.fileReader-content .box textarea {
-	width: 100%;
-	min-height: 200px;
-	padding: 0.5rem;
-	border-radius: 0.5rem;
-	border: 1px solid #00000030;
-}
-.fileReader-content .box textarea:focus {
-	outline: none;
-	-moz-outline-style: none;
-}
-
-.fileReader-content .box > div {
-	display: block;
-	margin: 1rem 0;
-	text-align: right;
-}
-.fileReader-content .box > div label {
-	margin-right: 1rem;
-}
-.fileReader-content .box > div select {
-	padding: 0.5rem;
-	background: none;
-	border: 1px solid #000000;
-	border-radius: 0.5rem;
-}
-
-.fileReader-content .box .btns button {
-	display: inline-block;
-	padding: 1rem;
-	width: 150px;
-	cursor: pointer;
+	margin: 1rem;
+	padding: 0.5rem 1rem;
 	background-color: #000;
 	color: #fff;
 	border: 1px solid #000;
-	border-radius: 0.5rem;
+	font-size: 1rem;
+	border-radius: 0.25rem;
+	transition: all 200ms ease;
+	cursor: pointer;
 }
-.fileReader-content .box .btns button:disabled {
-	background-color: #00000030;
-	border: 1px solid #00000030;
+button:disabled,
+button:disabled:hover {
+	background-color: #00000050;
 	color: #00000060;
+	border: 1px solid #00000030;
+	background-color: rgb(62, 62, 62, 0.5);
+}
+button:hover {
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #000;
+}
+.bodyCopy {
+	font-size: 1rem;
+	letter-spacing: 0.05rem;
+}
+.infos {
+	margin-bottom: -1rem;
+	margin-top: 1rem;
+	text-align: left;
+	padding: 0.25rem 0 0.25rem 0.5rem;
+	background-color: rgb(62, 62, 62);
+	border-top-left-radius: 0.5rem;
+	border-top-right-radius: 0.5rem;
+	color: #fff;
+}
+.handleTranslated {
+	text-align: right;
+	padding: 0 !important;
+	margin-top: 1rem;
+	margin-bottom: -1rem;
+	background-color: rgb(62, 62, 62);
+	border-top-left-radius: 0.5rem;
+	border-top-right-radius: 0.5rem;
+}
+.handleTranslated button {
+	padding: 0.25rem 0.5rem !important;
+	width: auto !important;
+	min-width: 0 !important;
+	margin: 0.25rem;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 0.75rem;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	color: #ffffff90;
+}
+.handleTranslated button span {
+	margin-left: 0.2rem;
+}
+.subInfos {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 2rem;
+}
+.highlightText {
+	font-size: 1rem;
+	letter-spacing: 0.05rem;
+	display: inline;
+	margin-right: 1rem;
+	font-size: 0.8rem;
+}
+.highlightText > span {
+	font-weight: 600;
+	margin-left: 0.5rem;
+}
+.header {
+	margin: 2rem 0;
+}
+.content .wrapper {
+	max-width: 700px;
+	/* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 1px;
+	border: 1px solid #00000030; */
+	padding: 1rem;
+	border-radius: 0.25rem;
+	margin: 3rem auto;
+}
+label {
+	font-size: 1rem;
+	margin-right: 0.5rem;
+}
+select {
+	padding: 0.5rem 1rem;
+	border: 1px solid #00000030;
+	color: #00000080;
+}
+textarea {
+	width: 100%;
+	font-size: 1rem;
+	min-height: 200px;
+	border-radius: 0.25rem;
+	border: 1px solid #00000030;
+	padding: 0.5rem;
+	margin: 1rem 0;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.langueSelector {
+	display: inline-block;
+}
+
+.btns {
+	display: inline-block;
+	padding: 0;
+}
+.sub-btns button {
+	margin: 0;
 }
