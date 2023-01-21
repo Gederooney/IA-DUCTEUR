@@ -17,6 +17,11 @@ h1 {
 	line-height: 1.25;
 	font-weight: 800;
 }
+h3 {
+	font-size: 2rem;
+	line-height: 1;
+	font-weight: 600;
+}
 input:active,
 input:focus,
 textarea:focus,
@@ -125,7 +130,8 @@ select {
 	border: 1px solid #00000030;
 	color: #00000080;
 }
-textarea {
+textarea,
+.file {
 	width: 100%;
 	font-size: 1rem;
 	min-height: 200px;
@@ -135,6 +141,27 @@ textarea {
 	margin: 1rem 0;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
+}
+.errorBox {
+	background-color: #ff0000;
+	color: #fff;
+	padding: 0.5rem;
+	margin: 1rem 0;
+	border-radius: 0.25rem;
+}
+.file {
+	background-color: #00000020;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.file button {
+	background-color: #00000050;
+	border: 1px solid #00000050;
+}
+.file button:hover {
+	background-color: #000;
+	color: #fff;
 }
 
 .langueSelector {
@@ -147,4 +174,19 @@ textarea {
 }
 .sub-btns button {
 	margin: 0;
+}
+
+button.goBack {
+	border: none;
+	background: none;
+	color: #000000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+	margin: 0;
+	margin-top: 0.5rem;
+}
+button.goBack svg {
+	width: 1rem;
 }

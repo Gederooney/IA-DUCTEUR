@@ -10,7 +10,7 @@ const initialState = {
 		content: "",
 		wordCount: 0,
 	},
-	lang: { label: "Français", value: "French" },
+	lang: { label: "Anglais", value: "English" },
 	translated: "",
 	translateType: null,
 };

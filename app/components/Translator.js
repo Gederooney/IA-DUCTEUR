@@ -13,20 +13,19 @@ import { setLoading, setError } from "../redux/reducers/global";
 
 // config();
 const languagesList = [
+	{ label: "Anglais", value: "English" },
 	{ label: "Français", value: "French" },
 	{ label: "Espagnol", value: "Spanish" },
-	{ label: "Anglais", value: "English" },
 	{ label: "Italien", value: "Italian" },
 	{ label: "Allemand", value: "German" },
 	{ label: "Mandarin", value: "Chinese" },
 	{ label: "Japonais", value: "Japanese" },
 ];
+
 const apiUrl =
 	process.env.NODE_ENV === "production"
 		? process.env.PROD_API_URL
 		: process.env.DEV_API_URL;
-
-console.log(apiUrl);
 
 function validateTextInput(text) {
 	if (!text) {
@@ -49,6 +48,11 @@ const Translator = () => {
 	const loading = useSelector((state) => {
 		state.global.loading;
 	});
+
+	const [fileName, setFileName] = useState("Choisir un fichier");
+	const [fileInput, setFileInput] = useState(null);
+
+	// let fileInput = null;
 	useEffect(() => {}, [text, langue, wordCount, translated]);
 
 	const handleChangeText = (e) => {
@@ -95,6 +99,70 @@ const Translator = () => {
 				store.dispatch(setError(error.message));
 				console.log(error);
 			}
+		}
+	};
+
+	const handleFileUpload = async (e) => {
+		const file = e.target.files[0];
+		if (!file) {
+			store.dispatch(setError("Veuillez choisir un fichier"));
+			setFileInput(null);
+			setFileName("Choisir un fichier");
+			return;
+		}
+		const allowedFileTypes = [
+			"application/msword",
+			"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			"application/pdf",
+			"text/plain",
+		];
+
+		// check file type
+		if (!allowedFileTypes.includes(file.type)) {
+			store.dispatch(setError("Veuillez choisir un fichier valide"));
+			setFileInput(null);
+			setFileName("Choisir un fichier");
+			return;
+		}
+
+		const fileSize = file.size;
+		if (fileSize > 1024 * 1024 * 2) {
+			store.dispatch(setError("Le fichier est trop volumineux"));
+			setFileInput(null);
+			setFileName("Choisir un fichier");
+			return;
+		}
+		setFileName(file.name);
+		store.dispatch(setError(""));
+	};
+
+	const handleSubmitFile = async (e) => {
+		store.dispatch(setLoading(true));
+		const formData = new FormData();
+
+		formData.append("file", fileInput.files[0]);
+		formData.append("data", JSON.stringify({ lang: langue.value }));
+		try {
+			const { file, success } = await axios.post(
+				`${apiUrl}/translate/file`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+					onUploadProgress: (event) => {
+						console.log(
+							`Current progress:`,
+							Math.round((event.loaded * 100) / event.total)
+						);
+					},
+				}
+			);
+
+			store.dispatch(setLoading(false));
+		} catch (error) {
+			store.dispatch(setError("Nous avons rencontré une erreur!"));
+			store.dispatch(setLoading(false));
 		}
 	};
 
@@ -266,7 +334,91 @@ const Translator = () => {
 						)}
 					</div>
 				)}
-				{type === "file" && <></>}
+				{type === "file" && (
+					<div className='wrapper'>
+						<div className='box'>
+							<p className='bodyCopy'>
+								Veuillez choisir un fichier à traduire. Notez
+								que seuls les fichiers (.txt, .pdf, .docx et
+								.doc) sont acceptés. La taille du fichier doit
+								être plus petit ou égal à 2Mo.
+							</p>
+							<div className='file'>
+								<button
+									className='handleFileUpload'
+									onClick={(e) => {
+										e.preventDefault();
+										if (!fileInput) {
+											const input =
+												document.createElement("input");
+											input.type = "file";
+											input.id = "fileUpload";
+											input.accept =
+												".txt,.pdf,.docx,.doc";
+											input.onchange = (e) =>
+												handleFileUpload(e);
+											setFileInput(input);
+											return input.click();
+										} else fileInput.click();
+									}}
+								>
+									{fileName}
+								</button>
+							</div>
+							<div className='subInfos'>
+								<div className='langueSelector'>
+									<label htmlFor='langue'>
+										Langue de traduction
+									</label>
+									<select
+										name='langue'
+										onChange={(e) =>
+											store.dispatch(
+												setLang(
+													languagesList.find(
+														(l) =>
+															l.value ===
+															e.target.value
+													)
+												)
+											)
+										}
+										defaultValue={langue.value}
+									>
+										{languagesList.map((l) => {
+											return (
+												<option
+													key={l.value}
+													value={l.value}
+													defaultValue={
+														l.value === langue.value
+															? true
+															: false
+													}
+												>
+													{l.label}
+												</option>
+											);
+										})}
+									</select>
+								</div>
+								<div className='sub-btns'>
+									<button
+										disabled={
+											!(
+												fileName !==
+													"Choisir un fichier" && true
+											)
+										}
+										onClick={(e) => handleSubmitFile(e)}
+									>
+										Traduire en {langue.label}
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
 			</div>
 		)
 	);

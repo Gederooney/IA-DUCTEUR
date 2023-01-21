@@ -1,7 +1,15 @@
 import React from "react";
 
 const Error = ({ errorMessage }) => {
-	return <>{errorMessage && <p>{errorMessage}</p>}</>;
+	return (
+		<>
+			{errorMessage && (
+				<div className='errorBox'>
+					<p>{errorMessage}</p>
+				</div>
+			)}
+		</>
+	);
 };
 
 export default Error;

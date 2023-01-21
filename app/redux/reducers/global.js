@@ -3,6 +3,7 @@ import { createSlice, payloadAction } from "@reduxjs/toolkit";
 const initialState = {
 	loading: true,
 	error: null,
+	disabledActions: false,
 };
 
 const globalSlice = createSlice({
@@ -17,11 +18,15 @@ const globalSlice = createSlice({
 			state.error = action.payload;
 			return;
 		},
+		setDisabledActions(state, action) {
+			state.disabledActions = action.payload;
+			return;
+		},
 	},
 });
 
 const { actions, reducer } = globalSlice;
 
-export const { setLoading, setError } = globalSlice.actions;
+export const { setLoading, setError, disabledActions } = globalSlice.actions;
 
 export default globalSlice.reducer;
