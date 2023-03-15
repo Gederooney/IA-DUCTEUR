@@ -2,9 +2,8 @@ import { createSlice, payloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
 	file: {
-		object: null,
-		fileName: null,
-		extension: null,
+		url: null,
+		name: "",
 	},
 	text: {
 		content: "",
@@ -34,11 +33,20 @@ const translatorSlice = createSlice({
 		setLang(state, { type, payload }) {
 			state.lang = payload;
 		},
+		resetTranslateState(state, action) {
+			state = initialState;
+		},
 	},
 });
 
 const { actions, reducer } = translatorSlice;
 
-export const { setFile, setText, setTranlateType, setLang, setTranslated } =
-	translatorSlice.actions;
+export const {
+	setFile,
+	setText,
+	setTranlateType,
+	setLang,
+	setTranslated,
+	resetTranslateState,
+} = translatorSlice.actions;
 export default translatorSlice.reducer;

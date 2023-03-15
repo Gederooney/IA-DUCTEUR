@@ -4,6 +4,9 @@ import { Provider } from "react-redux";
 import store from "@/app/redux/store";
 import Head from "next/head";
 
+import "@/app/styles/main.css";
+import "@/app/styles/loader.css";
+
 class MyApp extends App {
 	render() {
 		const { Component, pageProps } = this.props;

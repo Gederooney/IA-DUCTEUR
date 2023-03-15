@@ -3,7 +3,7 @@ import multer from "multer";
 import textract from "textract";
 import { v4 as uuidv4 } from "uuid";
 import { Configuration, OpenAIApi } from "openai";
-// const { Configuration, OpenAIApi } = require("openai");
+import fs from "fs";
 
 const configuration = new Configuration({
 	apiKey: "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",
@@ -58,7 +58,6 @@ const translate = async (str, lang) => {
 		const translated = "";
 		const promises = [];
 		let words = str.match(/\S+/g);
-		let chunks = [];
 		let chunkSize = 1000;
 
 		for (let i = 0; i < words.length; i += chunkSize) {
@@ -75,8 +74,11 @@ const translate = async (str, lang) => {
 				})
 			);
 		}
-		const responses = await Promise.all(promises);
-		console.log(responses);
+		console.log(promises.length);
+		const responses = (await Promise.all(promises))
+			.map((r) => r.data.choices[0].text)
+			.join(" ");
+		return { success: true, result: responses };
 	} catch (error) {
 		console.log(error.message);
 		return { success: false, message: "could not translate" };
@@ -93,23 +95,31 @@ fileTranslateRoute.post(async (req, res) => {
 		if (!file) {
 			return res.status(400).send("File is required");
 		}
-		textract.fromFileWithPath(file.path, (e, text) => {
+		textract.fromFileWithPath(file.path, async (e, text) => {
 			if (e) {
-				console.log(e);
 				return res
 					.status(400)
 					.send("Nous ne pouvons pas lire le fichier");
 			}
-			const { success } = translate(text, lang);
+			const { success, result } = await translate(text, lang);
 			if (!success)
 				return res.status(400).send("Nous ne pouvons pas traduire");
-			return res.status(200).json({ text, lang });
+			const name = file.originalname.split(".").slice(0, -1).join(".");
+			const newName = `${name}-translated-${lang}-${uuidv4()}.${file.originalname
+				.split(".")
+				.pop()}`;
+			fs.unlinkSync(file.path);
+			fs.writeFileSync(`./public/traduits/${newName}`, result);
+			return res.status(200).send({
+				success: true,
+				transaltedFile: newName,
+				contentAsString: result,
+			});
 		});
 		return;
-		// res.status(200).json({ success: true, file: req.file });
 	} catch (error) {
 		console.log(error.message);
-		res.status(500).json({ message: "erreur du serveur" });
+		res.status(500).json({ message: "erreur du serveur", success: false });
 	}
 });
 

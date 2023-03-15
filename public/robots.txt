@@ -1,0 +1,6 @@
+# Crawlers Setup for https://apps.ronygedeon.com
+
+User-agent: *
+
+Sitemap: https://apps.ronygedeon.com/sitemap.xml
+

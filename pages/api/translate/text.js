@@ -19,11 +19,11 @@ const handler = async (req, res) => {
 				presence_penalty: 0,
 			});
 			const { data } = response;
-			res.status(200).send({
+			res.status(200).json({
 				translated: data.choices[0].text.trim(),
 			});
 		} catch (error) {
-			res.status(500).send({
+			res.status(500).json({
 				error: true,
 				message: "désolé nous avaons rencontré une erreur",
 			});
