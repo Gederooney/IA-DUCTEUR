@@ -46,7 +46,7 @@ function splitString(string) {
 
 const index = () => {
 	const [text, setText] = useState("");
-	const [translatedText, setTranslatedText] = useState("kj");
+	const [translatedText, setTranslatedText] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [dragOver, setDragOver] = useState(false);
 	const dragZoneRef = useRef(null);
@@ -419,14 +419,14 @@ const index = () => {
 											focus:ring-primary/50 bg-primary/10'
 												type='text'
 												placeholder='Ecrivez
-											votre text ici ou déposez un fichier
+											votre texte ici ou déposez un fichier
 											.txt'
 												onFocus={(e) =>
 													(e.target.placeholder = "")
 												}
 												onBlur={(e) =>
 													(e.target.placeholder =
-														"Ecrivez votre text ici ou déposez un fichier .txt")
+														"Ecrivez votre texte ici ou déposez un fichier .txt")
 												}
 												onChange={(e) =>
 													handleChangeText(e)
