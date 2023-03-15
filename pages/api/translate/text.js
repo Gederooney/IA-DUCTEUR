@@ -1,8 +1,11 @@
 import { Configuration, OpenAIApi } from "openai";
 
+const apiKey = process.env.OPENAI_API_KEY ?? "";
+
 const configuration = new Configuration({
-	apiKey: "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",
+	apiKey,
 });
+
 const openai = new OpenAIApi(configuration);
 
 const handler = async (req, res) => {
@@ -27,6 +30,7 @@ const handler = async (req, res) => {
 				error: true,
 				message: "désolé nous avaons rencontré une erreur",
 			});
+			console.log(error.message);
 		}
 	}
 };
