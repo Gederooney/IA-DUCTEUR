@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const FileUploadBox = () => {
 	const dragZoneRef = useRef<HTMLDivElement>(null);
-	const { context, setContext } = useTraductorContext();
+	const { context } = useTraductorContext();
 
 	const { previewUrl, file } = context;
 

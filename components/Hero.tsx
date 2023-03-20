@@ -1,11 +1,6 @@
-import { useTraductorContext } from "@/Hooks/useContexts";
-import React, { useEffect, useRef, useState } from "react";
-import useFileParse from "@/Hooks/useFileParse";
-import FileUploadBox from "./FileUploadBox";
+import React from "react";
 
 function Hero() {
-	
-
 	return (
 		<section>
 			<div className='container mx-auto'>
@@ -56,7 +51,6 @@ function Hero() {
 							fichier et choississez la langue on s&rsquo;occupe
 							du reste.
 						</p>
-						
 					</div>
 				</div>
 			</div>

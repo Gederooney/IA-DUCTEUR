@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import { useTraductorContext } from "@/Hooks/useContexts";
-import useFileParse from "@/Hooks/useFileParse";
 import FileUploadBox from "./FileUploadBox";
 import LanguageList from "./LanguageList";
 import TranslateTypeSelector from "./TranslateTypeSelector";

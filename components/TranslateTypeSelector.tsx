@@ -3,13 +3,9 @@ import { useTraductorContext } from "@/Hooks/useContexts";
 import useFileParse from "@/Hooks/useFileParse";
 
 const TranslateTypeSelector = () => {
-	const { context, setContext } = useTraductorContext();
-	const { reset } = useFileParse();
+	const { context } = useTraductorContext();
 	const { flow } = context;
-
-	const setFlow = (flow: "file" | "text") => {
-		setContext({ ...context, flow });
-	};
+	const { reset } = useFileParse();
 
 	useEffect(() => {}, [flow]);
 
