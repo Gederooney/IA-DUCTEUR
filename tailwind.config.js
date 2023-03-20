@@ -28,6 +28,17 @@ module.exports = {
 			sans: ["'Manrop'", "'Inter'", "sans-serif"],
 			serif: ["'Montagu Slab'", "serif"],
 		},
+		fontWeight: {
+			thin: "100",
+			extralight: "200",
+			light: "300",
+			normal: "400",
+			medium: "500",
+			semibold: "600",
+			bold: "700",
+			extrabold: "800",
+			black: "900",
+		},
 		colors: {
 			primary: "#2d3748",
 			secondary: "#ff7a59",
