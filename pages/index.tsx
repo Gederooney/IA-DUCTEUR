@@ -44,7 +44,7 @@ export default function Home() {
 					href='/images/logo.svg'
 				/>
 			</Head>
-			<main>
+			<main className="min-h-screen">
 				<Header />
 				<Hero />
 				<Translator />
